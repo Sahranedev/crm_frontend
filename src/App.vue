@@ -1,7 +1,13 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useAuthStore } from './stores/auth'
 
 const mobileMenuOpen = ref(false)
+const authStore = useAuthStore()
+
+onMounted(() => {
+  authStore.initAuth()
+})
 </script>
 
 <template>
@@ -30,6 +36,7 @@ const mobileMenuOpen = ref(false)
               Accueil
             </router-link>
             <router-link
+              v-if="authStore.isAuthenticated"
               to="/clients"
               class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               active-class="text-blue-600 bg-blue-50"
@@ -37,6 +44,7 @@ const mobileMenuOpen = ref(false)
               Clients
             </router-link>
             <router-link
+              v-if="authStore.isAuthenticated"
               to="/opportunities"
               class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               active-class="text-blue-600 bg-blue-50"
@@ -44,12 +52,43 @@ const mobileMenuOpen = ref(false)
               Opportunités
             </router-link>
             <router-link
+              v-if="authStore.isAuthenticated"
               to="/dashboard"
               class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               active-class="text-blue-600 bg-blue-50"
             >
               Tableau de Bord
             </router-link>
+          </div>
+
+          <!-- Auth Links -->
+          <div class="hidden md:flex items-center space-x-4">
+            <template v-if="authStore.isAuthenticated">
+              <span class="text-sm text-gray-600">
+                Bonjour, {{ authStore.user?.email }}
+              </span>
+              <button
+                @click="authStore.logout()"
+                class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              >
+                Déconnexion
+              </button>
+            </template>
+            <template v-else>
+              <router-link
+                to="/login"
+                class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                active-class="text-blue-600 bg-blue-50"
+              >
+                Connexion
+              </router-link>
+              <router-link
+                to="/register"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+              >
+                Inscription
+              </router-link>
+            </template>
           </div>
 
           <!-- Mobile menu button -->
@@ -78,6 +117,7 @@ const mobileMenuOpen = ref(false)
               Accueil
             </router-link>
             <router-link
+              v-if="authStore.isAuthenticated"
               to="/clients"
               class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
               active-class="text-blue-600 bg-blue-50"
@@ -86,6 +126,7 @@ const mobileMenuOpen = ref(false)
               Clients
             </router-link>
             <router-link
+              v-if="authStore.isAuthenticated"
               to="/opportunities"
               class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
               active-class="text-blue-600 bg-blue-50"
@@ -94,6 +135,7 @@ const mobileMenuOpen = ref(false)
               Opportunités
             </router-link>
             <router-link
+              v-if="authStore.isAuthenticated"
               to="/dashboard"
               class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
               active-class="text-blue-600 bg-blue-50"
@@ -101,6 +143,40 @@ const mobileMenuOpen = ref(false)
             >
               Tableau de Bord
             </router-link>
+            
+            <!-- Mobile Auth Links -->
+            <template v-if="authStore.isAuthenticated">
+              <div class="border-t border-gray-200 pt-4 mt-4">
+                <div class="px-3 py-2 text-sm text-gray-600">
+                  Bonjour, {{ authStore.user?.email }}
+                </div>
+                <button
+                  @click="authStore.logout(); mobileMenuOpen = false"
+                  class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                >
+                  Déconnexion
+                </button>
+              </div>
+            </template>
+            <template v-else>
+              <div class="border-t border-gray-200 pt-4 mt-4">
+                <router-link
+                  to="/login"
+                  class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                  active-class="text-blue-600 bg-blue-50"
+                  @click="mobileMenuOpen = false"
+                >
+                  Connexion
+                </router-link>
+                <router-link
+                  to="/register"
+                  class="block px-3 py-2 rounded-md text-base font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                  @click="mobileMenuOpen = false"
+                >
+                  Inscription
+                </router-link>
+              </div>
+            </template>
           </div>
         </div>
       </div>
