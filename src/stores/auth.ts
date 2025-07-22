@@ -24,7 +24,6 @@ export const useAuthStore = defineStore("auth", () => {
     error.value = "";
 
     try {
-      // On suppose que l'API renvoie les infos utilisateur
       const response = await apiService.login(email, password) as any;
       const userData = response as User;      
       user.value = userData;
@@ -42,7 +41,6 @@ export const useAuthStore = defineStore("auth", () => {
     error.value = "";
 
     try {
-      // On suppose que l'API renvoie les infos utilisateur
       const response = await apiService.register(email, password) as any;
       const userData = response as User;
       user.value = userData;

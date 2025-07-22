@@ -2,7 +2,6 @@
   <div class="min-h-screen bg-gray-50">
     <div class="container mx-auto px-4 py-8">
       <div class="max-w-2xl mx-auto">
-        <!-- Header -->
         <div class="mb-8">
           <div class="flex items-center mb-4">
             <router-link
@@ -37,10 +36,8 @@
           </p>
         </div>
 
-        <!-- Form -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200">
           <form @submit.prevent="handleSubmit" class="p-6 space-y-6">
-            <!-- Name Field -->
             <div>
               <label
                 for="name"
@@ -64,7 +61,6 @@
               </p>
             </div>
 
-            <!-- Email Field -->
             <div>
               <label
                 for="email"
@@ -88,7 +84,6 @@
               </p>
             </div>
 
-            <!-- Phone Field -->
             <div>
               <label
                 for="phone"
@@ -112,7 +107,6 @@
               </p>
             </div>
 
-            <!-- Company Field -->
             <div>
               <label
                 for="company"
@@ -136,7 +130,6 @@
               </p>
             </div>
 
-            <!-- Notes Field -->
             <div>
               <label
                 for="notes"
@@ -153,7 +146,6 @@
               ></textarea>
             </div>
 
-            <!-- Form Actions -->
             <div
               class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200"
             >
@@ -192,7 +184,6 @@
           </form>
         </div>
 
-        <!-- Error Display -->
         <div
           v-if="error"
           class="mt-6 bg-red-50 border border-red-200 rounded-lg p-4"
@@ -207,7 +198,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useClientsStore, type Client } from "../stores/clients";
+import { useClientsStore } from "../stores/clients";
 
 const route = useRoute();
 const router = useRouter();

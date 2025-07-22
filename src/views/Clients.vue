@@ -1,7 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <div class="container mx-auto px-4 py-8">
-      <!-- Header -->
       <div
         class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8"
       >
@@ -30,7 +29,6 @@
         </router-link>
       </div>
 
-      <!-- Search and Filters -->
       <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
         <div class="flex flex-col sm:flex-row gap-4">
           <div class="flex-1">
@@ -66,14 +64,12 @@
         </div>
       </div>
 
-      <!-- Loading State -->
       <div v-if="loading" class="flex justify-center items-center py-12">
         <div
           class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"
         ></div>
       </div>
 
-      <!-- Error State -->
       <div
         v-else-if="error"
         class="bg-red-50 border border-red-200 rounded-lg p-6 text-center"
@@ -81,7 +77,6 @@
         <p class="text-red-600">{{ error }}</p>
       </div>
 
-      <!-- Clients List -->
       <div
         v-else-if="filteredClients.length > 0"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
@@ -192,7 +187,6 @@
         </div>
       </div>
 
-      <!-- Empty State -->
       <div v-else class="bg-white rounded-lg shadow-sm p-12 text-center">
         <svg
           class="mx-auto h-12 w-12 text-gray-400 mb-4"
@@ -239,7 +233,6 @@
       </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
     <div
       v-if="showDeleteModal"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
@@ -278,20 +271,17 @@ import { useClientsStore, type Client } from "../stores/clients";
 
 const clientsStore = useClientsStore();
 
-// État local
 const searchQuery = ref("");
 const sortBy = ref("name");
 const showDeleteModal = ref(false);
 const clientToDelete = ref<Client | null>(null);
 
-// Computed properties
 const loading = computed(() => clientsStore.loading);
 const error = computed(() => clientsStore.error);
 
 const filteredClients = computed(() => {
   let filtered = clientsStore.clients;
 
-  // Filtrage par recherche
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase();
     filtered = filtered.filter(
@@ -302,7 +292,6 @@ const filteredClients = computed(() => {
     );
   }
 
-  // Tri
   filtered.sort((a, b) => {
     switch (sortBy.value) {
       case "name":

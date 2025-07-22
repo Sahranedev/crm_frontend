@@ -1,13 +1,11 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <div class="container mx-auto px-4 py-8">
-      <!-- Header -->
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900">Tableau de Bord</h1>
         <p class="text-gray-600 mt-2">Vue d'ensemble de votre activité commerciale</p>
       </div>
 
-      <!-- Stats Overview -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-blue-500">
           <div class="flex items-center">
@@ -66,9 +64,7 @@
         </div>
       </div>
 
-      <!-- Charts and Details -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <!-- Opportunities by Status -->
         <div class="bg-white rounded-lg shadow-sm p-6">
           <h3 class="text-lg font-semibold text-gray-900 mb-4">Répartition par Statut</h3>
           <div class="space-y-4">
@@ -125,7 +121,6 @@
           </div>
         </div>
 
-        <!-- Recent Activity -->
         <div class="bg-white rounded-lg shadow-sm p-6">
           <h3 class="text-lg font-semibold text-gray-900 mb-4">Activité Récente</h3>
           <div class="space-y-4">
@@ -161,7 +156,6 @@
         </div>
       </div>
 
-      <!-- Top Clients -->
       <div class="bg-white rounded-lg shadow-sm p-6">
         <h3 class="text-lg font-semibold text-gray-900 mb-4">Top Clients par Opportunités</h3>
         <div class="overflow-x-auto">
@@ -202,7 +196,6 @@ import { useOpportunitiesStore, Status } from '../stores/opportunities'
 const clientsStore = useClientsStore()
 const opportunitiesStore = useOpportunitiesStore()
 
-// Computed properties
 const totalClients = computed(() => clientsStore.totalClients)
 const totalOpportunities = computed(() => opportunitiesStore.totalOpportunities)
 const totalRevenue = computed(() => opportunitiesStore.totalRevenue)

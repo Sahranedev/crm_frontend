@@ -1,11 +1,5 @@
 const API_BASE_URL = "http://localhost:8000";
 
-interface ApiResponse<T = any> {
-  data?: T;
-  error?: string;
-  message?: string;
-}
-
 class ApiService {
   private async request<T>(
     endpoint: string,

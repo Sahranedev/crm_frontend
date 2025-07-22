@@ -2,11 +2,12 @@ import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import { apiService } from "../services/api";
 
-export enum Status {
-  IN_PROGRESS = "in_progress",
-  WON = "won",
-  LOST = "lost",
-}
+export const Status = {
+  IN_PROGRESS: "in_progress",
+  WON: "won",
+  LOST: "lost",
+} as const;
+export type Status = (typeof Status)[keyof typeof Status];
 
 export interface Opportunity {
   id: string;
@@ -61,7 +62,7 @@ export const useOpportunitiesStore = defineStore("opportunities", () => {
     error.value = null;
     try {
       const data = await apiService.getOpportunities();
-      opportunities.value = data;
+      opportunities.value = data as Opportunity[];
     } catch (err: any) {
       error.value = "Erreur lors du chargement des opportunités";
       console.error(err);
@@ -75,7 +76,7 @@ export const useOpportunitiesStore = defineStore("opportunities", () => {
     error.value = null;
     try {
       const created = await apiService.createOpportunity(opportunityData);
-      opportunities.value.push(created);
+      opportunities.value.push(created as Opportunity);
       return created;
     } catch (err) {
       error.value = "Erreur lors de l'ajout de l'opportunité";
@@ -93,7 +94,7 @@ export const useOpportunitiesStore = defineStore("opportunities", () => {
       const updated = await apiService.updateOpportunity(id, opportunityData);
       const index = opportunities.value.findIndex((opp) => opp.id === id);
       if (index !== -1) {
-        opportunities.value[index] = updated;
+        opportunities.value[index] = updated as Opportunity;
         return updated;
       }
       throw new Error("Opportunité non trouvée");

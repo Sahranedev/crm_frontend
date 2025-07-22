@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import { apiService } from "../services/api";
 
-// Types basés sur le schéma Prisma
 export interface Client {
   id: string;
   name: string;
@@ -14,19 +13,16 @@ export interface Client {
 }
 
 export const useClientsStore = defineStore("clients", () => {
-  // État réactif
   const clients = ref<Client[]>([]);
   const loading = ref(false);
   const error = ref<string | null>(null);
 
-  // Getters
   const getClientById = computed(() => {
     return (id: string) => clients.value.find((client) => client.id === id);
   });
 
   const totalClients = computed(() => clients.value.length);
 
-  // Actions
   const fetchClients = async () => {
     loading.value = true;
     error.value = null;
@@ -101,14 +97,11 @@ export const useClientsStore = defineStore("clients", () => {
   };
 
   return {
-    // État
     clients,
     loading,
     error,
-    // Getters
     getClientById,
     totalClients,
-    // Actions
     fetchClients,
     addClient,
     updateClient,
