@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
+import { apiService } from "../services/api";
 
-// Types basés sur le schéma Prisma
 export enum Status {
   IN_PROGRESS = "in_progress",
   WON = "won",
@@ -22,28 +22,26 @@ export interface Opportunity {
 }
 
 export const useOpportunitiesStore = defineStore("opportunities", () => {
-  // État réactif
   const opportunities = ref<Opportunity[]>([]);
   const loading = ref(false);
   const error = ref<string | null>(null);
 
   // Getters
-  const getOpportunityById = computed(() => {
-    return (id: string) => opportunities.value.find((opp) => opp.id === id);
-  });
+  const getOpportunityById = computed(() => (id: string) =>
+    opportunities.value.find((opp) => opp.id === id)
+  );
 
-  const getOpportunitiesByClient = computed(() => {
-    return (clientId: string) =>
-      opportunities.value.filter((opp) => opp.clientId === clientId);
-  });
+  const getOpportunitiesByClient = computed(() => (clientId: string) =>
+    opportunities.value.filter((opp) => opp.clientId === clientId)
+  );
 
   const totalOpportunities = computed(() => opportunities.value.length);
 
-  const totalRevenue = computed(() => {
-    return opportunities.value
+  const totalRevenue = computed(() =>
+    opportunities.value
       .filter((opp) => opp.status === Status.WON)
-      .reduce((sum, opp) => sum + opp.amount, 0);
-  });
+      .reduce((sum, opp) => sum + opp.amount, 0)
+  );
 
   const opportunitiesByStatus = computed(() => {
     const stats = {
@@ -62,12 +60,9 @@ export const useOpportunitiesStore = defineStore("opportunities", () => {
     loading.value = true;
     error.value = null;
     try {
-      // Simulation d'un appel API - à remplacer par un vrai appel
-      const storedOpportunities = localStorage.getItem("crm_opportunities");
-      if (storedOpportunities) {
-        opportunities.value = JSON.parse(storedOpportunities);
-      }
-    } catch (err) {
+      const data = await apiService.getOpportunities();
+      opportunities.value = data;
+    } catch (err: any) {
       error.value = "Erreur lors du chargement des opportunités";
       console.error(err);
     } finally {
@@ -75,23 +70,13 @@ export const useOpportunitiesStore = defineStore("opportunities", () => {
     }
   };
 
-  const addOpportunity = async (
-    opportunityData: Omit<Opportunity, "id" | "createdAt">
-  ) => {
+  const addOpportunity = async (opportunityData: Omit<Opportunity, "id" | "createdAt">) => {
     loading.value = true;
     error.value = null;
     try {
-      const newOpportunity: Opportunity = {
-        ...opportunityData,
-        id: crypto.randomUUID(),
-        createdAt: new Date(),
-      };
-      opportunities.value.push(newOpportunity);
-      localStorage.setItem(
-        "crm_opportunities",
-        JSON.stringify(opportunities.value)
-      );
-      return newOpportunity;
+      const created = await apiService.createOpportunity(opportunityData);
+      opportunities.value.push(created);
+      return created;
     } catch (err) {
       error.value = "Erreur lors de l'ajout de l'opportunité";
       console.error(err);
@@ -101,24 +86,15 @@ export const useOpportunitiesStore = defineStore("opportunities", () => {
     }
   };
 
-  const updateOpportunity = async (
-    id: string,
-    opportunityData: Partial<Opportunity>
-  ) => {
+  const updateOpportunity = async (id: string, opportunityData: Partial<Opportunity>) => {
     loading.value = true;
     error.value = null;
     try {
+      const updated = await apiService.updateOpportunity(id, opportunityData);
       const index = opportunities.value.findIndex((opp) => opp.id === id);
       if (index !== -1) {
-        opportunities.value[index] = {
-          ...opportunities.value[index],
-          ...opportunityData,
-        };
-        localStorage.setItem(
-          "crm_opportunities",
-          JSON.stringify(opportunities.value)
-        );
-        return opportunities.value[index];
+        opportunities.value[index] = updated;
+        return updated;
       }
       throw new Error("Opportunité non trouvée");
     } catch (err) {
@@ -134,13 +110,10 @@ export const useOpportunitiesStore = defineStore("opportunities", () => {
     loading.value = true;
     error.value = null;
     try {
+      await apiService.deleteOpportunity(id);
       const index = opportunities.value.findIndex((opp) => opp.id === id);
       if (index !== -1) {
         opportunities.value.splice(index, 1);
-        localStorage.setItem(
-          "crm_opportunities",
-          JSON.stringify(opportunities.value)
-        );
         return true;
       }
       throw new Error("Opportunité non trouvée");
@@ -154,17 +127,14 @@ export const useOpportunitiesStore = defineStore("opportunities", () => {
   };
 
   return {
-    // État
     opportunities,
     loading,
     error,
-    // Getters
     getOpportunityById,
     getOpportunitiesByClient,
     totalOpportunities,
     totalRevenue,
     opportunitiesByStatus,
-    // Actions
     fetchOpportunities,
     addOpportunity,
     updateOpportunity,
