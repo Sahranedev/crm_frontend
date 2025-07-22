@@ -26,17 +26,16 @@ onMounted(() => {
             <span class="text-xl font-bold text-gray-900">CRM</span>
           </router-link>
 
-          <!-- Navigation Links -->
-          <div class="hidden md:flex items-center space-x-8">
+          <!-- Navigation Links - Only for authenticated users -->
+          <div v-if="authStore.isAuthenticated" class="hidden md:flex items-center space-x-8">
             <router-link
-              to="/"
+              to="/dashboard"
               class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               active-class="text-blue-600 bg-blue-50"
             >
-              Accueil
+              Tableau de Bord
             </router-link>
             <router-link
-              v-if="authStore.isAuthenticated"
               to="/clients"
               class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               active-class="text-blue-600 bg-blue-50"
@@ -44,20 +43,11 @@ onMounted(() => {
               Clients
             </router-link>
             <router-link
-              v-if="authStore.isAuthenticated"
               to="/opportunities"
               class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               active-class="text-blue-600 bg-blue-50"
             >
               Opportunités
-            </router-link>
-            <router-link
-              v-if="authStore.isAuthenticated"
-              to="/dashboard"
-              class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-              active-class="text-blue-600 bg-blue-50"
-            >
-              Tableau de Bord
             </router-link>
           </div>
 
@@ -108,44 +98,34 @@ onMounted(() => {
         <!-- Mobile menu -->
         <div v-if="mobileMenuOpen" class="md:hidden">
           <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200">
-            <router-link
-              to="/"
-              class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
-              active-class="text-blue-600 bg-blue-50"
-              @click="mobileMenuOpen = false"
-            >
-              Accueil
-            </router-link>
-            <router-link
-              v-if="authStore.isAuthenticated"
-              to="/clients"
-              class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
-              active-class="text-blue-600 bg-blue-50"
-              @click="mobileMenuOpen = false"
-            >
-              Clients
-            </router-link>
-            <router-link
-              v-if="authStore.isAuthenticated"
-              to="/opportunities"
-              class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
-              active-class="text-blue-600 bg-blue-50"
-              @click="mobileMenuOpen = false"
-            >
-              Opportunités
-            </router-link>
-            <router-link
-              v-if="authStore.isAuthenticated"
-              to="/dashboard"
-              class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
-              active-class="text-blue-600 bg-blue-50"
-              @click="mobileMenuOpen = false"
-            >
-              Tableau de Bord
-            </router-link>
-            
-            <!-- Mobile Auth Links -->
+            <!-- Navigation Links for authenticated users -->
             <template v-if="authStore.isAuthenticated">
+              <router-link
+                to="/dashboard"
+                class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                active-class="text-blue-600 bg-blue-50"
+                @click="mobileMenuOpen = false"
+              >
+                Tableau de Bord
+              </router-link>
+              <router-link
+                to="/clients"
+                class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                active-class="text-blue-600 bg-blue-50"
+                @click="mobileMenuOpen = false"
+              >
+                Clients
+              </router-link>
+              <router-link
+                to="/opportunities"
+                class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                active-class="text-blue-600 bg-blue-50"
+                @click="mobileMenuOpen = false"
+              >
+                Opportunités
+              </router-link>
+              
+              <!-- Mobile Auth Links for authenticated users -->
               <div class="border-t border-gray-200 pt-4 mt-4">
                 <div class="px-3 py-2 text-sm text-gray-600">
                   Bonjour, {{ authStore.user?.email }}
@@ -158,24 +138,24 @@ onMounted(() => {
                 </button>
               </div>
             </template>
+            
+            <!-- Mobile Auth Links for non-authenticated users -->
             <template v-else>
-              <div class="border-t border-gray-200 pt-4 mt-4">
-                <router-link
-                  to="/login"
-                  class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
-                  active-class="text-blue-600 bg-blue-50"
-                  @click="mobileMenuOpen = false"
-                >
-                  Connexion
-                </router-link>
-                <router-link
-                  to="/register"
-                  class="block px-3 py-2 rounded-md text-base font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-                  @click="mobileMenuOpen = false"
-                >
-                  Inscription
-                </router-link>
-              </div>
+              <router-link
+                to="/login"
+                class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                active-class="text-blue-600 bg-blue-50"
+                @click="mobileMenuOpen = false"
+              >
+                Connexion
+              </router-link>
+              <router-link
+                to="/register"
+                class="block px-3 py-2 rounded-md text-base font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                @click="mobileMenuOpen = false"
+              >
+                Inscription
+              </router-link>
             </template>
           </div>
         </div>

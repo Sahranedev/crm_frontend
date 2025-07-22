@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { requireAuth } from "./guards";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
@@ -73,5 +74,8 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+// Appliquer le guard d'authentification à toutes les routes
+router.beforeEach(requireAuth);
 
 export default router;

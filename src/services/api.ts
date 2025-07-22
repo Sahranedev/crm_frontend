@@ -63,7 +63,6 @@ class ApiService {
   async login(email: string, password: string) {
     return this.request("/auth/login", {
       method: "POST",
-      credentials: "include",
       body: JSON.stringify({ email, password }),
     });
   }
@@ -71,7 +70,6 @@ class ApiService {
   async register(email: string, password: string) {
     return this.request("/auth/register", {
       method: "POST",
-      credentials: "include",
       body: JSON.stringify({ email, password }),
     });
   }

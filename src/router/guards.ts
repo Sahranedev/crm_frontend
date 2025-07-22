@@ -1,0 +1,28 @@
+import type { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
+import { useAuthStore } from "../stores/auth";
+
+// Routes publiques qui ne nécessitent pas d'authentification
+const publicRoutes = ["/login", "/register"];
+
+export function requireAuth(
+  to: RouteLocationNormalized,
+  from: RouteLocationNormalized,
+  next: NavigationGuardNext
+) {
+  const authStore = useAuthStore();
+
+  // Si l'utilisateur est authentifié, autoriser l'accès
+  if (authStore.isAuthenticated) {
+    next();
+    return;
+  }
+
+  // Si c'est une route publique, autoriser l'accès
+  if (publicRoutes.includes(to.path)) {
+    next();
+    return;
+  }
+
+  // Sinon, rediriger vers la page de connexion
+  next("/login");
+}
