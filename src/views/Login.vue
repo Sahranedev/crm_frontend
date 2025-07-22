@@ -85,7 +85,6 @@ const handleLogin = async () => {
     await authStore.login(form.value.email, form.value.password)
     router.push('/dashboard')
   } catch (err) {
-    // L'erreur est déjà gérée dans le store
   }
 }
 </script> 

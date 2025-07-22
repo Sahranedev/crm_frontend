@@ -17,17 +17,6 @@ class ApiService {
       "Content-Type": "application/json",
     };
 
-    // Ajouter le token d'authentification s'il existe
-    const user = localStorage.getItem("user");
-    if (user) {
-      try {
-        const userData = JSON.parse(user);
-        // Note: Le backend utilise des cookies httpOnly, donc pas besoin d'ajouter le token manuellement
-      } catch (e) {
-        // Ignorer les erreurs de parsing
-      }
-    }
-
     const config: RequestInit = {
       ...options,
       headers: {
@@ -71,6 +60,12 @@ class ApiService {
     return this.request("/auth/register", {
       method: "POST",
       body: JSON.stringify({ email, password }),
+    });
+  }
+
+  async logout() {
+    return this.request("/auth/logout", {
+      method: "POST",
     });
   }
 

@@ -11,8 +11,13 @@ export function requireAuth(
 ) {
   const authStore = useAuthStore();
 
+  if(authStore.isAuthenticated && publicRoutes.includes(to.path)) {
+    next("/dashboard");
+    return;
+  }
+
   // Si l'utilisateur est authentifié, autoriser l'accès
-  if (authStore.isAuthenticated) {
+  if (authStore.isAuthenticated && !publicRoutes.includes(to.path)) {
     next();
     return;
   }

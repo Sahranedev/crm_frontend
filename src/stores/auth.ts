@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import { apiService } from "../services/api";
+import 'pinia-plugin-persistedstate';
 
 interface User {
   id: string;
@@ -14,29 +15,19 @@ export const useAuthStore = defineStore("auth", () => {
   const loading = ref(false);
   const error = ref("");
 
-  const isAuthenticated = computed(() => !!user.value);
-
-  // Initialiser l'utilisateur depuis localStorage au démarrage
-  const initAuth = () => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        user.value = JSON.parse(storedUser);
-      } catch (e) {
-        localStorage.removeItem("user");
-      }
-    }
-  };
+  const isAuthenticated = computed(() => {
+    return !!user.value;
+  });
 
   const login = async (email: string, password: string) => {
     loading.value = true;
     error.value = "";
 
     try {
-      const userData = (await apiService.login(email, password)) as User;
+      // On suppose que l'API renvoie les infos utilisateur
+      const response = await apiService.login(email, password) as any;
+      const userData = response as User;      
       user.value = userData;
-      localStorage.setItem("user", JSON.stringify(userData));
-
       return userData;
     } catch (err: any) {
       error.value = err.message || "Une erreur est survenue";
@@ -51,10 +42,10 @@ export const useAuthStore = defineStore("auth", () => {
     error.value = "";
 
     try {
-      const userData = (await apiService.register(email, password)) as User;
+      // On suppose que l'API renvoie les infos utilisateur
+      const response = await apiService.register(email, password) as any;
+      const userData = response as User;
       user.value = userData;
-      localStorage.setItem("user", JSON.stringify(userData));
-
       return userData;
     } catch (err: any) {
       error.value = err.message || "Une erreur est survenue";
@@ -64,9 +55,9 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     user.value = null;
-    localStorage.removeItem("user");
+    await apiService.logout();
   };
 
   const clearError = () => {
@@ -78,10 +69,11 @@ export const useAuthStore = defineStore("auth", () => {
     loading,
     error,
     isAuthenticated,
-    initAuth,
     login,
     register,
     logout,
     clearError,
   };
+}, {
+  persist: true
 });

@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
+import { apiService } from "../services/api";
 
 // Types basés sur le schéma Prisma
 export interface Client {
@@ -30,11 +31,9 @@ export const useClientsStore = defineStore("clients", () => {
     loading.value = true;
     error.value = null;
     try {
-      // Simulation d'un appel API - à remplacer par un vrai appel
-      const storedClients = localStorage.getItem("crm_clients");
-      if (storedClients) {
-        clients.value = JSON.parse(storedClients);
-      }
+      const response = await apiService.getClients();
+      const data = (response as { data?: Client[] })?.data || (response as Client[]);
+      clients.value = data;
     } catch (err) {
       error.value = "Erreur lors du chargement des clients";
       console.error(err);
@@ -47,13 +46,9 @@ export const useClientsStore = defineStore("clients", () => {
     loading.value = true;
     error.value = null;
     try {
-      const newClient: Client = {
-        ...clientData,
-        id: crypto.randomUUID(),
-        createdAt: new Date(),
-      };
+      const response = await apiService.createClient(clientData);
+      const newClient = (response as { data?: Client })?.data || (response as Client);
       clients.value.push(newClient);
-      localStorage.setItem("crm_clients", JSON.stringify(clients.value));
       return newClient;
     } catch (err) {
       error.value = "Erreur lors de l'ajout du client";
@@ -68,10 +63,11 @@ export const useClientsStore = defineStore("clients", () => {
     loading.value = true;
     error.value = null;
     try {
+      const response = await apiService.updateClient(id, clientData);
+      const updatedClient = (response as { data?: Client })?.data || (response as Client);
       const index = clients.value.findIndex((client) => client.id === id);
       if (index !== -1) {
-        clients.value[index] = { ...clients.value[index], ...clientData };
-        localStorage.setItem("crm_clients", JSON.stringify(clients.value));
+        clients.value[index] = { ...clients.value[index], ...updatedClient };
         return clients.value[index];
       }
       throw new Error("Client non trouvé");
@@ -88,10 +84,10 @@ export const useClientsStore = defineStore("clients", () => {
     loading.value = true;
     error.value = null;
     try {
+      await apiService.deleteClient(id);
       const index = clients.value.findIndex((client) => client.id === id);
       if (index !== -1) {
         clients.value.splice(index, 1);
-        localStorage.setItem("crm_clients", JSON.stringify(clients.value));
         return true;
       }
       throw new Error("Client non trouvé");
