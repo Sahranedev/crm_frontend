@@ -204,7 +204,6 @@ const route = useRoute();
 const router = useRouter();
 const clientsStore = useClientsStore();
 
-// État local
 const loading = ref(false);
 const error = ref<string | null>(null);
 const errors = ref<Record<string, string>>({});
@@ -217,11 +216,9 @@ const form = ref({
   notes: "",
 });
 
-// Computed properties
 const isEditing = computed(() => !!route.params.id);
 const clientId = computed(() => route.params.id as string);
 
-// Méthodes
 const validateForm = () => {
   errors.value = {};
 

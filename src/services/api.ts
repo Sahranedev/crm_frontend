@@ -17,7 +17,7 @@ class ApiService {
         ...defaultHeaders,
         ...options.headers,
       },
-      credentials: "include", // Inclure les cookies
+      credentials: "include",
     };
 
     try {
@@ -28,7 +28,6 @@ class ApiService {
         throw new Error(errorData.message || `Erreur HTTP: ${response.status}`);
       }
 
-      // Si la réponse est vide, retourner un objet vide
       if (response.status === 204) {
         return {} as T;
       }
@@ -42,7 +41,6 @@ class ApiService {
     }
   }
 
-  // Méthodes d'authentification
   async login(email: string, password: string) {
     return this.request("/auth/login", {
       method: "POST",
@@ -63,7 +61,6 @@ class ApiService {
     });
   }
 
-  // Méthodes pour les clients
   async getClients() {
     return this.request("/clients");
   }
@@ -92,7 +89,6 @@ class ApiService {
     });
   }
 
-  // Méthodes pour les opportunités
   async getOpportunities() {
     return this.request("/opportunities");
   }
@@ -121,7 +117,6 @@ class ApiService {
     });
   }
 
-  // Méthode pour vérifier l'authentification
   async checkAuth() {
     return this.request("/clients/me");
   }

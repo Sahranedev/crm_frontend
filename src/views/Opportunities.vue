@@ -1,7 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <div class="container mx-auto px-4 py-8">
-      <!-- Header -->
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
         <div>
           <h1 class="text-3xl font-bold text-gray-900">Gestion des Opportunités</h1>
@@ -18,7 +17,6 @@
         </router-link>
       </div>
 
-      <!-- Search and Filters -->
       <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
         <div class="flex flex-col sm:flex-row gap-4">
           <div class="flex-1">
@@ -60,17 +58,14 @@
         </div>
       </div>
 
-      <!-- Loading State -->
       <div v-if="loading" class="flex justify-center items-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
       </div>
 
-      <!-- Error State -->
       <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
         <p class="text-red-600">{{ error }}</p>
       </div>
 
-      <!-- Opportunities List -->
       <div v-else-if="filteredOpportunities.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
           v-for="opportunity in filteredOpportunities"
@@ -129,7 +124,6 @@
         </div>
       </div>
 
-      <!-- Empty State -->
       <div v-else class="bg-white rounded-lg shadow-sm p-12 text-center">
         <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -150,7 +144,6 @@
       </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
     <div v-if="showDeleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
         <h3 class="text-lg font-medium text-gray-900 mb-4">Confirmer la suppression</h3>
@@ -184,21 +177,18 @@ import { useClientsStore } from '../stores/clients'
 const opportunitiesStore = useOpportunitiesStore()
 const clientsStore = useClientsStore()
 
-// État local
 const searchQuery = ref('')
 const statusFilter = ref('')
 const sortBy = ref('title')
 const showDeleteModal = ref(false)
 const opportunityToDelete = ref<Opportunity | null>(null)
 
-// Computed properties
 const loading = computed(() => opportunitiesStore.loading)
 const error = computed(() => opportunitiesStore.error)
 
 const filteredOpportunities = computed(() => {
   let filtered = opportunitiesStore.opportunities
 
-  // Filtrage par recherche
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase()
     filtered = filtered.filter(opp =>
@@ -207,12 +197,10 @@ const filteredOpportunities = computed(() => {
     )
   }
 
-  // Filtrage par statut
   if (statusFilter.value) {
     filtered = filtered.filter(opp => opp.status === statusFilter.value)
   }
 
-  // Tri
   filtered.sort((a, b) => {
     switch (sortBy.value) {
       case 'title':
@@ -231,7 +219,6 @@ const filteredOpportunities = computed(() => {
   return filtered
 })
 
-// Méthodes
 const formatCurrency = (amount: number) => {
   return new Intl.NumberFormat('fr-FR', {
     style: 'currency',

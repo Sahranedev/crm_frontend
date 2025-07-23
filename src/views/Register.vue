@@ -94,12 +94,10 @@ const handleRegister = async () => {
     await authStore.register(form.value.email, form.value.password)
     success.value = 'Compte créé avec succès ! Redirection...'
     
-    // Rediriger vers le dashboard après un court délai
     setTimeout(() => {
       router.push('/dashboard')
     }, 1500)
   } catch (err) {
-    // L'erreur est déjà gérée dans le store
   }
 }
 </script> 

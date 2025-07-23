@@ -1,7 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
     <div class="container mx-auto px-4 py-8">
-      <!-- Header -->
       <div class="text-center mb-12">
         <h1 class="text-4xl font-bold text-gray-900 mb-4">
           Bienvenue dans votre CRM
@@ -12,7 +11,6 @@
         </p>
       </div>
 
-      <!-- Auth Section for non-authenticated users -->
       <div class="text-center mb-12">
         <div class="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto">
           <h2 class="text-2xl font-bold text-gray-900 mb-4">
@@ -38,7 +36,6 @@
         </div>
       </div>
 
-      <!-- Features Section -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div class="bg-white rounded-lg shadow-lg p-6">
           <div class="text-center">
@@ -89,7 +86,6 @@ const router = useRouter()
 const authStore = useAuthStore()
 
 onMounted(() => {
-  // Si l'utilisateur est déjà connecté, le rediriger vers le dashboard
   if (authStore.isAuthenticated) {
     router.push('/dashboard')
   }

@@ -2,7 +2,6 @@
   <div class="min-h-screen bg-gray-50">
     <div class="container mx-auto px-4 py-8">
       <div class="max-w-2xl mx-auto">
-        <!-- Header -->
         <div class="mb-8">
           <div class="flex items-center mb-4">
             <router-link
@@ -23,10 +22,8 @@
           </p>
         </div>
 
-        <!-- Form -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200">
           <form @submit.prevent="handleSubmit" class="p-6 space-y-6">
-            <!-- Title Field -->
             <div>
               <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
                 Titre de l'opportunité <span class="text-red-500">*</span>
@@ -45,7 +42,6 @@
               <p v-if="errors.title" class="mt-1 text-sm text-red-600">{{ errors.title }}</p>
             </div>
 
-            <!-- Client Selection -->
             <div>
               <label for="clientId" class="block text-sm font-medium text-gray-700 mb-2">
                 Client <span class="text-red-500">*</span>
@@ -71,7 +67,6 @@
               <p v-if="errors.clientId" class="mt-1 text-sm text-red-600">{{ errors.clientId }}</p>
             </div>
 
-            <!-- Amount Field -->
             <div>
               <label for="amount" class="block text-sm font-medium text-gray-700 mb-2">
                 Montant (€) <span class="text-red-500">*</span>
@@ -92,7 +87,6 @@
               <p v-if="errors.amount" class="mt-1 text-sm text-red-600">{{ errors.amount }}</p>
             </div>
 
-            <!-- Status Field -->
             <div>
               <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
                 Statut <span class="text-red-500">*</span>
@@ -114,7 +108,6 @@
               <p v-if="errors.status" class="mt-1 text-sm text-red-600">{{ errors.status }}</p>
             </div>
 
-            <!-- Form Actions -->
             <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
               <router-link
                 to="/opportunities"
@@ -137,7 +130,6 @@
           </form>
         </div>
 
-        <!-- Error Display -->
         <div v-if="error" class="mt-6 bg-red-50 border border-red-200 rounded-lg p-4">
           <p class="text-red-600">{{ error }}</p>
         </div>
@@ -157,7 +149,6 @@ const router = useRouter()
 const opportunitiesStore = useOpportunitiesStore()
 const clientsStore = useClientsStore()
 
-// État local
 const loading = ref(false)
 const error = ref<string | null>(null)
 const errors = ref<Record<string, string>>({})
@@ -169,12 +160,10 @@ const form = ref({
   status: '' as Status
 })
 
-// Computed properties
 const isEditing = computed(() => !!route.params.id)
 const opportunityId = computed(() => route.params.id as string)
 const clients = computed(() => clientsStore.clients)
 
-// Méthodes
 const validateForm = () => {
   errors.value = {}
 
