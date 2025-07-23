@@ -76,6 +76,8 @@ const router = createRouter({
 });
 
 // Appliquer le guard d'authentification à toutes les routes
-router.beforeEach(requireAuth);
+router.beforeEach((to, _from, next) => {
+  requireAuth(to, next);
+});
 
 export default router;

@@ -149,7 +149,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useOpportunitiesStore, type Opportunity, Status } from '../stores/opportunities'
+import { useOpportunitiesStore, Status } from '../stores/opportunities'
 import { useClientsStore } from '../stores/clients'
 
 const route = useRoute()

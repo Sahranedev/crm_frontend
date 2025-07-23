@@ -6,7 +6,6 @@ const publicRoutes = ["/login", "/register"];
 
 export function requireAuth(
   to: RouteLocationNormalized,
-  from: RouteLocationNormalized,
   next: NavigationGuardNext
 ) {
   const authStore = useAuthStore();
