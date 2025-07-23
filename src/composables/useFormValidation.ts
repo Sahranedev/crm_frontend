@@ -50,7 +50,6 @@ export function useFormValidation<T extends Record<string, any>>(
       return `Maximum ${rule.maxLength} caractères autorisés`;
     }
 
-    // Pattern validation
     if (
       rule.pattern &&
       typeof value === "string" &&
@@ -59,7 +58,6 @@ export function useFormValidation<T extends Record<string, any>>(
       return "Format invalide";
     }
 
-    // Custom validation
     if (rule.custom) {
       return rule.custom(value);
     }

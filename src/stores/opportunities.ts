@@ -27,13 +27,13 @@ export const useOpportunitiesStore = defineStore("opportunities", () => {
   const loading = ref(false);
   const error = ref<string | null>(null);
 
-  // Getters
-  const getOpportunityById = computed(() => (id: string) =>
-    opportunities.value.find((opp) => opp.id === id)
+  const getOpportunityById = computed(
+    () => (id: string) => opportunities.value.find((opp) => opp.id === id)
   );
 
-  const getOpportunitiesByClient = computed(() => (clientId: string) =>
-    opportunities.value.filter((opp) => opp.clientId === clientId)
+  const getOpportunitiesByClient = computed(
+    () => (clientId: string) =>
+      opportunities.value.filter((opp) => opp.clientId === clientId)
   );
 
   const totalOpportunities = computed(() => opportunities.value.length);
@@ -56,7 +56,6 @@ export const useOpportunitiesStore = defineStore("opportunities", () => {
     return stats;
   });
 
-  // Actions
   const fetchOpportunities = async () => {
     loading.value = true;
     error.value = null;
@@ -71,7 +70,9 @@ export const useOpportunitiesStore = defineStore("opportunities", () => {
     }
   };
 
-  const addOpportunity = async (opportunityData: Omit<Opportunity, "id" | "createdAt">) => {
+  const addOpportunity = async (
+    opportunityData: Omit<Opportunity, "id" | "createdAt">
+  ) => {
     loading.value = true;
     error.value = null;
     try {
@@ -87,7 +88,10 @@ export const useOpportunitiesStore = defineStore("opportunities", () => {
     }
   };
 
-  const updateOpportunity = async (id: string, opportunityData: Partial<Opportunity>) => {
+  const updateOpportunity = async (
+    id: string,
+    opportunityData: Partial<Opportunity>
+  ) => {
     loading.value = true;
     error.value = null;
     try {

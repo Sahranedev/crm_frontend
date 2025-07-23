@@ -218,7 +218,6 @@ const topClients = computed(() => {
     .slice(0, 5)
 })
 
-// Méthodes
 const formatCurrency = (amount: number) => {
   return new Intl.NumberFormat('fr-FR', {
     style: 'currency',

@@ -310,7 +310,6 @@ const filteredClients = computed(() => {
   return filtered;
 });
 
-// Méthodes
 const formatDate = (date: Date) => {
   return new Intl.DateTimeFormat("fr-FR", {
     day: "2-digit",
